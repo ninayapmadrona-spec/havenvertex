@@ -1,0 +1,65 @@
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-14px); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.55; }
+  50% { opacity: 1; }
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes particle-drift {
+  0% { transform: translate(0, 0); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: translate(var(--drift-x, 40px), var(--drift-y, -60px)); opacity: 0; }
+}
+
+.hero-logo {
+  animation: float-slow 7s var(--ease-premium) infinite;
+}
+
+.hero-logo-glow {
+  animation: pulse-glow 4.5s ease-in-out infinite;
+}
+
+.hero-particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.hero-particles span {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--soft-lilac);
+  box-shadow: 0 0 8px 1px var(--accent-violet);
+  animation: particle-drift linear infinite;
+}
+
+.visual-card {
+  animation: float-slow 6s var(--ease-premium) infinite;
+}
+
+.visual-card--bottom {
+  animation-delay: -2.5s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

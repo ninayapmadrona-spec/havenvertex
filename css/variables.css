@@ -1,0 +1,56 @@
+:root {
+  /* Brand — primary purple system (~90% of the palette) */
+  --primary-purple: #6d28d9;
+  --deep-purple: #4c1d95;
+  --accent-violet: #a855f7;
+  --soft-lilac: #e9d5ff;
+  --cyan-accent: #22d3ee;
+
+  /* Brand — premium accent (~10%, used sparingly) */
+  --premium-gold: #d4a036;
+  --premium-gold-soft: #e8c880;
+
+  --black: #0a0a12;
+  --white: #ffffff;
+
+  /* Dark theme surfaces (index + AI-Enabled) */
+  --bg: var(--black);
+  --bg-elevated: #12101c;
+  --surface: rgba(255, 255, 255, 0.04);
+  --surface-strong: rgba(255, 255, 255, 0.07);
+  --border: rgba(255, 255, 255, 0.1);
+  --text-primary: var(--white);
+  --text-secondary: rgba(255, 255, 255, 0.68);
+  --text-muted: rgba(255, 255, 255, 0.44);
+
+  /* Fonts */
+  --font-display: 'Poppins', sans-serif;
+  --font-body: 'Inter', sans-serif;
+
+  /* Motion */
+  --ease-premium: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-fast: 0.35s;
+  --dur-medium: 0.6s;
+  --dur-slow: 1s;
+
+  /* Shape */
+  --radius-sm: 12px;
+  --radius-md: 18px;
+  --radius-lg: 24px;
+
+  /* Layout */
+  --container: 1200px;
+  --nav-height: 88px;
+}
+
+/* Human-First route — bright, professional, human */
+[data-theme='light'] {
+  --bg: #fbf9ff;
+  --bg-elevated: #ffffff;
+  --surface: rgba(109, 40, 217, 0.05);
+  --surface-strong: rgba(109, 40, 217, 0.09);
+  --border: rgba(76, 29, 149, 0.12);
+  --text-primary: #1a1424;
+  --text-secondary: rgba(26, 20, 36, 0.66);
+  --text-muted: rgba(26, 20, 36, 0.46);
+}
