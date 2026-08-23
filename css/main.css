@@ -209,9 +209,18 @@ h1, h2, h3, h4 {
   gap: 12px;
 }
 
-.nav-brand img {
-  width: 40px;
-  height: auto;
+.brand-mark {
+  display: block;
+  fill: url(#gradPurple);
+}
+
+.brand-mark.is-gold {
+  fill: url(#gradGold);
+}
+
+.nav-brand .brand-mark {
+  width: 34px;
+  height: 34px;
 }
 
 .nav-brand-text {
@@ -335,8 +344,9 @@ h1, h2, h3, h4 {
   gap: 12px;
 }
 
-.footer-brand img {
-  width: 34px;
+.footer-brand .brand-mark {
+  width: 30px;
+  height: 30px;
 }
 
 .footer-brand-text {
@@ -793,9 +803,9 @@ h1, h2, h3, h4 {
   justify-content: center;
 }
 
-.visual-frame img {
-  width: 55%;
-  opacity: 0.9;
+.visual-frame .brand-mark {
+  width: 46%;
+  opacity: 0.92;
 }
 
 .visual-card {
