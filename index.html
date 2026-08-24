@@ -16,7 +16,6 @@
 
   <link rel="stylesheet" href="/css/variables.css" />
   <link rel="stylesheet" href="/css/main.css" />
-  <link rel="stylesheet" href="/css/animations.css" />
 
   <noscript><style>.hero[data-hero="landing"]{opacity:1 !important;}</style></noscript>
 </head>
@@ -61,7 +60,25 @@
       <div class="hero-particles"></div>
 
       <div class="hero-visual">
-        <svg class="hero-logo brand-mark" viewBox="0 0 200 200" role="img" aria-label="Haven Vertex mark"><use href="#hvMark" /></svg>
+        <div class="globe-wrap">
+          <div class="globe-glow"></div>
+          <svg class="globe" viewBox="0 0 240 240" role="img" aria-label="Animated globe">
+            <circle class="globe-ring" cx="120" cy="120" r="98" />
+            <ellipse class="globe-meridian" cx="120" cy="120" rx="40" ry="98" />
+            <ellipse class="globe-meridian globe-meridian--2" cx="120" cy="120" rx="70" ry="98" />
+            <ellipse class="globe-parallel" cx="120" cy="120" rx="98" ry="30" />
+            <ellipse class="globe-parallel globe-parallel--2" cx="120" cy="120" rx="98" ry="55" />
+            <circle class="globe-core" cx="120" cy="120" r="96" />
+            <g class="globe-nodes">
+              <circle class="node" cx="120" cy="22" r="4" />
+              <circle class="node" cx="218" cy="120" r="4" />
+              <circle class="node" cx="120" cy="218" r="4" />
+              <circle class="node" cx="22" cy="120" r="4" />
+              <circle class="node" cx="192" cy="48" r="3" />
+              <circle class="node" cx="48" cy="192" r="3" />
+            </g>
+          </svg>
+        </div>
         <h1 class="hero-wordmark">HAVEN<span>VERTEX</span></h1>
       </div>
 
@@ -106,7 +123,5 @@
   </div>
 
   <script type="module" src="/js/app.js"></script>
-  <script type="module" src="/js/animations.js"></script>
-  <script type="module" src="/js/portal.js"></script>
 </body>
 </html>
