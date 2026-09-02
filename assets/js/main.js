@@ -5,12 +5,7 @@
 
   const isDesktop = () => window.matchMedia('(min-width: 861px)').matches;
 
-  /* ---- Nav ---- */
-  const nav = document.getElementById('nav');
-  const onScrollNav = () => nav.classList.toggle('scrolled', window.scrollY > 20);
-  onScrollNav();
-  window.addEventListener('scroll', onScrollNav, { passive: true });
-
+  /* ---- Mobile menu ---- */
   const navToggle = document.getElementById('navToggle');
   const navMobile = document.getElementById('navMobile');
   navToggle.addEventListener('click', () => navMobile.classList.toggle('open'));
@@ -28,22 +23,24 @@
   }, { threshold: 0.15, rootMargin: '0px 0px -6% 0px' });
   revealEls.forEach(el => revealObserver.observe(el));
 
-  /* ---- Story progress dots ---- */
-  const TOTAL_CHAPTERS = 6;
-  document.querySelectorAll('.story-progress').forEach(container => {
-    const forChapter = parseInt(container.dataset.progressFor, 10);
-    for (let i = 1; i <= TOTAL_CHAPTERS; i++) {
-      const dot = document.createElement('i');
-      if (i === forChapter) dot.classList.add('is-current');
-      container.appendChild(dot);
-    }
+  /* ---- Rail: click a dot to jump to its chapter ---- */
+  const railDots = Array.from(document.querySelectorAll('.rail-dot'));
+  railDots.forEach(dot => {
+    dot.addEventListener('click', () => {
+      const target = document.getElementById(dot.dataset.target);
+      if (target) target.scrollIntoView({ behavior: 'smooth' });
+    });
   });
 
-  /* ---- Story tracks: scroll-scrubbed enter/exit ---- */
+  const TOTAL_CHAPTERS = railDots.length;
   const tracks = Array.from(document.querySelectorAll('.story-track'));
+  const railFill = document.getElementById('railFill');
+  const railFollower = document.getElementById('railFollower');
+  const railDotsContainer = document.getElementById('railDots');
 
   function clamp01(n) { return Math.min(1, Math.max(0, n)); }
 
+  /* ---- Story tracks: scroll-scrubbed enter/exit ---- */
   function updateStoryCard(card, progress) {
     const enterEnd = 0.16;
     const exitStart = 0.84;
@@ -65,6 +62,36 @@
     card.classList.toggle('is-active', progress >= enterEnd && progress <= exitStart);
   }
 
+  /* ---- Rail: continuous progress fill + morphing follower ---- */
+  function updateRail(overallProgress) {
+    if (railFill) railFill.style.height = (overallProgress * 100).toFixed(1) + '%';
+
+    const activeIndex = Math.min(TOTAL_CHAPTERS - 1, Math.floor(overallProgress * TOTAL_CHAPTERS));
+    railDots.forEach((dot, i) => {
+      dot.classList.toggle('is-active', i === activeIndex);
+      dot.classList.toggle('is-complete', i < activeIndex);
+    });
+
+    if (railFollower && railDotsContainer && railDots.length) {
+      const containerRect = railDotsContainer.getBoundingClientRect();
+      const firstRect = railDots[0].getBoundingClientRect();
+      const lastRect = railDots[railDots.length - 1].getBoundingClientRect();
+      if (isDesktop()) {
+        const firstCenter = firstRect.top + firstRect.height / 2 - containerRect.top;
+        const lastCenter = lastRect.top + lastRect.height / 2 - containerRect.top;
+        const y = firstCenter + (lastCenter - firstCenter) * overallProgress;
+        railFollower.style.top = y.toFixed(1) + 'px';
+        railFollower.style.left = '50%';
+      } else {
+        const firstCenter = firstRect.left + firstRect.width / 2 - containerRect.left;
+        const lastCenter = lastRect.left + lastRect.width / 2 - containerRect.left;
+        const x = firstCenter + (lastCenter - firstCenter) * overallProgress;
+        railFollower.style.left = x.toFixed(1) + 'px';
+        railFollower.style.top = '50%';
+      }
+    }
+  }
+
   function mobileShowAllCards() {
     document.querySelectorAll('.story-card').forEach(card => {
       card.style.opacity = '1';
@@ -74,9 +101,11 @@
   }
 
   let ticking = false;
-  function updateAllTracks() {
+  function updateAll() {
     ticking = false;
+    if (!tracks.length) return;
     const vh = window.innerHeight;
+
     tracks.forEach(track => {
       const rect = track.getBoundingClientRect();
       const total = rect.height - vh;
@@ -85,11 +114,18 @@
       const card = track.querySelector('.story-card');
       if (card) updateStoryCard(card, progress);
     });
+
+    const firstRect = tracks[0].getBoundingClientRect();
+    const lastRect = tracks[tracks.length - 1].getBoundingClientRect();
+    const journeyTop = firstRect.top + window.scrollY;
+    const journeyBottom = lastRect.top + lastRect.height + window.scrollY - vh;
+    const overallProgress = clamp01((window.scrollY - journeyTop) / (journeyBottom - journeyTop));
+    updateRail(overallProgress);
   }
 
   function onScroll() {
     if (!ticking) {
-      window.requestAnimationFrame(updateAllTracks);
+      window.requestAnimationFrame(updateAll);
       ticking = true;
     }
   }
@@ -98,9 +134,12 @@
     if (isDesktop()) {
       window.addEventListener('scroll', onScroll, { passive: true });
       window.addEventListener('resize', onScroll);
-      updateAllTracks();
+      updateAll();
     } else {
       mobileShowAllCards();
+      window.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('resize', onScroll);
+      updateAll();
     }
   }
 

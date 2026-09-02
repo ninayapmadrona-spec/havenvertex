@@ -12,30 +12,34 @@
 </head>
 <body>
 
-<!-- ============ NAV ============ -->
-<header class="nav" id="nav">
-  <div class="container nav-inner">
-    <a href="#top" class="nav-brand">
-      <svg class="nav-mark" viewBox="0 0 40 40" fill="none"><polygon points="20,4 34,30 6,30" fill="url(#navGrad)"/><defs><linearGradient id="navGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#8B5CF6"/><stop offset="100%" stop-color="#6D28D9"/></linearGradient></defs></svg>
-      <span>Haven Vertex</span>
-    </a>
-    <nav class="nav-links">
-      <a href="#story">Our Story</a>
-      <a href="#services">Services</a>
-      <a href="#audience">Who We Help</a>
-      <a href="#contact">Contact</a>
-    </nav>
-    <a href="#contact" class="btn btn-primary btn-small nav-cta">Book a Free Call</a>
-    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu"><span></span><span></span><span></span></button>
-  </div>
-  <div class="nav-mobile" id="navMobile">
-    <a href="#story">Our Story</a>
-    <a href="#services">Services</a>
-    <a href="#audience">Who We Help</a>
-    <a href="#contact">Contact</a>
-    <a href="#contact" class="btn btn-primary">Book a Free Call</a>
-  </div>
-</header>
+<!-- ============ FLOATING RAIL NAVIGATION ============ -->
+<aside class="rail" id="rail" aria-label="Chapter navigation">
+  <a href="#top" class="rail-mark" aria-label="Haven Vertex — home">
+    <svg viewBox="0 0 40 40" fill="none"><polygon points="20,4 34,30 6,30" fill="url(#railGrad)"/><defs><linearGradient id="railGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#C4B5FD"/><stop offset="100%" stop-color="#8B5CF6"/></linearGradient></defs></svg>
+  </a>
+  <nav class="rail-dots" id="railDots">
+    <div class="rail-track" aria-hidden="true"><div class="rail-track-fill" id="railFill"></div></div>
+    <div class="rail-follower" id="railFollower" aria-hidden="true"></div>
+    <button class="rail-dot" data-target="track-1"><span class="rail-dot-core"></span><span class="rail-dot-label">01 · The Chaos</span></button>
+    <button class="rail-dot" data-target="track-2"><span class="rail-dot-core"></span><span class="rail-dot-label">02 · The Foundation</span></button>
+    <button class="rail-dot" data-target="track-3"><span class="rail-dot-core"></span><span class="rail-dot-label">03 · Digital Presence</span></button>
+    <button class="rail-dot" data-target="track-4"><span class="rail-dot-core"></span><span class="rail-dot-label">04 · Visibility</span></button>
+    <button class="rail-dot" data-target="track-5"><span class="rail-dot-core"></span><span class="rail-dot-label">05 · Growth Engine</span></button>
+    <button class="rail-dot" data-target="track-6"><span class="rail-dot-core"></span><span class="rail-dot-label">06 · The Haven</span></button>
+  </nav>
+  <div class="rail-caption">Digital Growth Partner</div>
+</aside>
+
+<a href="#contact" class="floating-cta">Book a Free Call</a>
+
+<button class="nav-toggle" id="navToggle" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+<div class="nav-mobile" id="navMobile">
+  <a href="#story">Our Story</a>
+  <a href="#services">Services</a>
+  <a href="#audience">Who We Help</a>
+  <a href="#contact">Contact</a>
+  <a href="#contact" class="btn btn-primary">Book a Free Call</a>
+</div>
 
 <main id="top">
 
@@ -369,8 +373,8 @@
 <!-- ============ FOOTER ============ -->
 <footer class="footer">
   <div class="container footer-inner">
-    <a href="#top" class="nav-brand">
-      <svg class="nav-mark" viewBox="0 0 40 40" fill="none"><polygon points="20,4 34,30 6,30" fill="url(#footGrad)"/><defs><linearGradient id="footGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#8B5CF6"/><stop offset="100%" stop-color="#6D28D9"/></linearGradient></defs></svg>
+    <a href="#top" class="footer-brand">
+      <svg class="footer-mark" viewBox="0 0 40 40" fill="none"><polygon points="20,4 34,30 6,30" fill="url(#footGrad)"/><defs><linearGradient id="footGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#C4B5FD"/><stop offset="100%" stop-color="#8B5CF6"/></linearGradient></defs></svg>
       <span>Haven Vertex</span>
     </a>
     <p class="footer-tag">Websites. Systems. Content. Growth.</p>
