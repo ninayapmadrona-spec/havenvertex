@@ -23,6 +23,18 @@
   }, { threshold: 0.15, rootMargin: '0px 0px -6% 0px' });
   revealEls.forEach(el => revealObserver.observe(el));
 
+  /* ---- Hero background video: pause when off-screen ---- */
+  const heroVideo = document.querySelector('.hero-video-bg');
+  if (heroVideo) {
+    const heroVideoObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) heroVideo.play().catch(() => {});
+        else heroVideo.pause();
+      });
+    }, { threshold: 0.1 });
+    heroVideoObserver.observe(heroVideo);
+  }
+
   const railDots = Array.from(document.querySelectorAll('.rail-dot'));
   const TOTAL_CHAPTERS = railDots.length;
   const railFill = document.getElementById('railFill');
