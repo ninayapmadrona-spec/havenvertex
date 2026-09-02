@@ -35,6 +35,50 @@
     heroVideoObserver.observe(heroVideo);
   }
 
+  /* ---- Audience globe: highlight the visitor's city once located ---- */
+  (() => {
+    const svg = document.querySelector('.audience-globe-svg');
+    if (!svg) return;
+
+    // Country code -> one of the illustrative cities already drawn on the map.
+    const COUNTRY_TO_CITY = {
+      US: 'New York', GB: 'London', CA: 'Toronto', ZA: 'Cape Town',
+      BR: 'Sao Paulo', IN: 'Mumbai', JP: 'Tokyo', SG: 'Singapore'
+    };
+
+    function setNote(text) {
+      const note = document.querySelector('.audience-globe-visitor-note');
+      if (note) note.textContent = text;
+    }
+
+    function highlightCity(city) {
+      const group = svg.querySelector(`.globe-node-group[data-city="${city}"]`);
+      if (group) group.classList.add('is-visitor');
+      svg.querySelectorAll(`[data-arc-city="${city}"]`).forEach(el => el.classList.add('is-visitor'));
+      setNote(`You're near ${city} — let's connect.`);
+    }
+
+    function highlightHub() {
+      const hub = svg.querySelector('.globe-hub-group');
+      if (hub) hub.classList.add('is-visitor');
+      setNote("You're in Australia — right in our home market.");
+    }
+
+    // Exposed for manual testing (e.g. from the console or Playwright): __hvLocateVisitor('US')
+    window.__hvLocateVisitor = function (countryCode) {
+      if (!countryCode) return;
+      const code = String(countryCode).toUpperCase();
+      if (code === 'AU') { highlightHub(); return; }
+      const city = COUNTRY_TO_CITY[code];
+      if (city) highlightCity(city);
+    };
+
+    fetch('https://get.geojs.io/v1/ip/geo.json')
+      .then(r => (r.ok ? r.json() : null))
+      .then(data => { if (data && data.country_code) window.__hvLocateVisitor(data.country_code); })
+      .catch(() => { /* no network / blocked / unsupported country: leave the ambient map as-is */ });
+  })();
+
   const railDots = Array.from(document.querySelectorAll('.rail-dot'));
   const TOTAL_CHAPTERS = railDots.length;
   const railFill = document.getElementById('railFill');
