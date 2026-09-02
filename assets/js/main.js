@@ -23,43 +23,70 @@
   }, { threshold: 0.15, rootMargin: '0px 0px -6% 0px' });
   revealEls.forEach(el => revealObserver.observe(el));
 
-  /* ---- Rail: click a dot to jump to its chapter ---- */
   const railDots = Array.from(document.querySelectorAll('.rail-dot'));
-  railDots.forEach(dot => {
-    dot.addEventListener('click', () => {
-      const target = document.getElementById(dot.dataset.target);
-      if (target) target.scrollIntoView({ behavior: 'smooth' });
-    });
-  });
-
   const TOTAL_CHAPTERS = railDots.length;
-  const tracks = Array.from(document.querySelectorAll('.story-track'));
   const railFill = document.getElementById('railFill');
   const railFollower = document.getElementById('railFollower');
   const railDotsContainer = document.getElementById('railDots');
 
   function clamp01(n) { return Math.min(1, Math.max(0, n)); }
 
-  /* ---- Story tracks: scroll-scrubbed enter/exit ---- */
-  function updateStoryCard(card, progress) {
-    const enterEnd = 0.16;
-    const exitStart = 0.84;
-    let t, opacity, translate;
-    if (progress < enterEnd) {
-      t = progress / enterEnd;
-      opacity = t;
-      translate = 46 * (1 - t);
-    } else if (progress > exitStart) {
-      t = (progress - exitStart) / (1 - exitStart);
-      opacity = 1 - t;
-      translate = -46 * t;
-    } else {
-      opacity = 1;
-      translate = 0;
-    }
-    card.style.opacity = String(opacity);
-    card.style.transform = `translateY(${translate.toFixed(1)}px)`;
-    card.classList.toggle('is-active', progress >= enterEnd && progress <= exitStart);
+  /* ---- Horizontal accordion story track ---- */
+  const storyTrack = document.getElementById('storyTrack');
+  const hPanels = Array.from(document.querySelectorAll('.h-panel'));
+  const NUM_PANELS = hPanels.length;
+  const BULGE = 3.4; // how much wider the focused panel gets relative to its neighbours
+
+  /* Rail dots jump into a proportional slice of the single scroll track */
+  railDots.forEach((dot, i) => {
+    dot.addEventListener('click', () => {
+      if (!storyTrack) return;
+      if (!isDesktop()) {
+        hPanels[i].scrollIntoView({ behavior: 'smooth', block: 'start' });
+        return;
+      }
+      const rect = storyTrack.getBoundingClientRect();
+      const vh = window.innerHeight;
+      const total = rect.height - vh;
+      const chapterProgress = NUM_PANELS > 1 ? i / (NUM_PANELS - 1) : 0;
+      const targetY = window.scrollY + rect.top + chapterProgress * total;
+      window.scrollTo({ top: targetY, behavior: 'smooth' });
+    });
+  });
+
+  function updatePanels(progress) {
+    if (!hPanels.length) return;
+    const focusIndex = progress * (NUM_PANELS - 1);
+
+    const weights = hPanels.map((_, i) => 1 + BULGE * Math.max(0, 1 - Math.abs(focusIndex - i)));
+    const weightSum = weights.reduce((a, b) => a + b, 0);
+
+    let activeIndex = 0;
+    let bestDist = Infinity;
+
+    hPanels.forEach((panel, i) => {
+      const widthPct = (weights[i] / weightSum) * 100;
+      panel.style.width = widthPct.toFixed(3) + '%';
+
+      const dist = Math.abs(focusIndex - i);
+      if (dist < bestDist) { bestDist = dist; activeIndex = i; }
+
+      const contentOpacity = clamp01(1 - dist * 1.6);
+      const content = panel.querySelector('.h-panel-content');
+      if (content) content.style.opacity = String(contentOpacity);
+    });
+
+    hPanels.forEach((panel, i) => panel.classList.toggle('is-focused', i === activeIndex));
+    return activeIndex;
+  }
+
+  function mobileResetPanels() {
+    hPanels.forEach(panel => {
+      panel.style.width = '';
+      panel.classList.add('is-focused');
+      const content = panel.querySelector('.h-panel-content');
+      if (content) content.style.opacity = '';
+    });
   }
 
   /* ---- Rail: continuous progress fill + morphing follower ---- */
@@ -92,35 +119,19 @@
     }
   }
 
-  function mobileShowAllCards() {
-    document.querySelectorAll('.story-card').forEach(card => {
-      card.style.opacity = '1';
-      card.style.transform = 'none';
-      card.classList.add('is-active');
-    });
-  }
-
   let ticking = false;
   function updateAll() {
     ticking = false;
-    if (!tracks.length) return;
+    if (!storyTrack) return;
     const vh = window.innerHeight;
 
-    tracks.forEach(track => {
-      const rect = track.getBoundingClientRect();
-      const total = rect.height - vh;
-      const scrolled = -rect.top;
-      const progress = clamp01(total > 0 ? scrolled / total : 0);
-      const card = track.querySelector('.story-card');
-      if (card) updateStoryCard(card, progress);
-    });
+    const rect = storyTrack.getBoundingClientRect();
+    const total = rect.height - vh;
+    const scrolled = -rect.top;
+    const storyProgress = clamp01(total > 0 ? scrolled / total : 0);
 
-    const firstRect = tracks[0].getBoundingClientRect();
-    const lastRect = tracks[tracks.length - 1].getBoundingClientRect();
-    const journeyTop = firstRect.top + window.scrollY;
-    const journeyBottom = lastRect.top + lastRect.height + window.scrollY - vh;
-    const overallProgress = clamp01((window.scrollY - journeyTop) / (journeyBottom - journeyTop));
-    updateRail(overallProgress);
+    if (isDesktop()) updatePanels(storyProgress);
+    updateRail(storyProgress);
   }
 
   function onScroll() {
@@ -136,7 +147,7 @@
       window.addEventListener('resize', onScroll);
       updateAll();
     } else {
-      mobileShowAllCards();
+      mobileResetPanels();
       window.addEventListener('scroll', onScroll, { passive: true });
       window.addEventListener('resize', onScroll);
       updateAll();
