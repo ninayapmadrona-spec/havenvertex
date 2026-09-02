@@ -73,6 +73,7 @@
     document.querySelectorAll('.ring, .return-line, .glimmer').forEach(el => el.classList.add('is-visible'));
     document.querySelectorAll('.growth-ticket').forEach(el => el.classList.add('is-visible'));
     document.querySelectorAll('.growth-phone').forEach(el => el.classList.add('is-answered'));
+    document.querySelectorAll('.service-legend').forEach(el => el.classList.add('is-visible'));
     const hg = document.getElementById('hgBottom');
     if (hg) hg.style.fill = 'rgba(227,216,246,0.55)';
     document.querySelectorAll('.chapter-pin').forEach(el => el.classList.add('is-visible'));
@@ -132,6 +133,7 @@
     });
     const visual = root.querySelector('.presence-visual');
     if (visual) visual.classList.toggle('is-pulsing', progress > 0.88 && progress < 0.97);
+    updatePresenceParallax(progress, root);
   }
 
   function updateVisibility(progress, root) {
@@ -145,6 +147,8 @@
       const t = parseFloat(dot.dataset.t || '0.5');
       if (progress > t) dot.classList.add('is-visible');
     });
+    const legend = root.querySelector('.service-legend');
+    if (legend) legend.classList.toggle('is-visible', progress > 0.55);
   }
 
   function updateGrowth(progress, root, section) {
@@ -169,6 +173,13 @@
       const goldT = progress > 0.75 ? (progress - 0.75) / 0.25 : 0;
       overlay.style.opacity = String(clamp01(goldT));
     }
+    const legend = root.querySelector('.service-legend');
+    if (legend) legend.classList.toggle('is-visible', progress > 0.4);
+  }
+
+  function updatePresenceParallax(progress, root) {
+    const glowOffset = (progress - 0.5) * 40;
+    root.style.setProperty('--presence-parallax', glowOffset.toFixed(1) + 'px');
   }
 
   const updaters = {

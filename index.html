@@ -13,6 +13,13 @@
 </head>
 <body>
 
+<div class="ambient-bg" aria-hidden="true">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+  <div class="ambient-particles"></div>
+</div>
+
 <!-- ============ PERSISTENT RAIL ============ -->
 <aside class="rail" id="rail" aria-label="Chapter navigation">
   <div class="rail-mark" aria-hidden="true">
@@ -35,11 +42,28 @@
   <section class="landing" id="landing">
     <div class="landing-glow landing-glow-1" aria-hidden="true"></div>
     <div class="landing-glow landing-glow-2" aria-hidden="true"></div>
+    <div class="landing-rays" aria-hidden="true"></div>
+    <div class="landing-crystal" aria-hidden="true">
+      <svg viewBox="0 0 300 500">
+        <defs>
+          <linearGradient id="crystalGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#EFE8FF" stop-opacity="0.55"/>
+            <stop offset="45%" stop-color="#D8C8F5" stop-opacity="0.28"/>
+            <stop offset="100%" stop-color="#4B2F8A" stop-opacity="0.4"/>
+          </linearGradient>
+        </defs>
+        <polygon points="150,10 260,140 220,480 80,480 40,140" fill="url(#crystalGrad)" stroke="rgba(239,232,255,0.6)" stroke-width="1.5"/>
+        <polygon points="150,10 260,140 150,200 40,140" fill="rgba(255,255,255,0.14)"/>
+        <polygon points="150,200 260,140 220,480 150,420" fill="rgba(75,47,138,0.3)"/>
+        <line x1="150" y1="10" x2="150" y2="480" stroke="rgba(239,232,255,0.28)" stroke-width="1"/>
+      </svg>
+    </div>
+    <div class="landing-particles" aria-hidden="true"></div>
 
     <div class="card-row-wrap">
       <div class="card-row" id="cardRow">
 
-        <button class="chapter-card is-start" data-target="chapter-chaos">
+        <button class="chapter-card is-start crystal-sheen" data-target="chapter-chaos">
           <span class="card-start">Start</span>
           <span class="card-top">
             <span class="card-number">01</span>
@@ -53,7 +77,7 @@
           </span>
         </button>
 
-        <button class="chapter-card" data-target="chapter-foundation">
+        <button class="chapter-card crystal-sheen" data-target="chapter-foundation">
           <span class="card-top">
             <span class="card-number">02</span>
             <span class="card-motif motif-foundation" aria-hidden="true">
@@ -66,7 +90,7 @@
           </span>
         </button>
 
-        <button class="chapter-card" data-target="chapter-presence">
+        <button class="chapter-card crystal-sheen" data-target="chapter-presence">
           <span class="card-top">
             <span class="card-number">03</span>
             <span class="card-motif motif-presence" aria-hidden="true">
@@ -79,7 +103,7 @@
           </span>
         </button>
 
-        <button class="chapter-card" data-target="chapter-visibility">
+        <button class="chapter-card crystal-sheen" data-target="chapter-visibility">
           <span class="card-top">
             <span class="card-number">04</span>
             <span class="card-motif motif-visibility" aria-hidden="true">
@@ -92,7 +116,7 @@
           </span>
         </button>
 
-        <button class="chapter-card" data-target="chapter-growth">
+        <button class="chapter-card crystal-sheen" data-target="chapter-growth">
           <span class="card-top">
             <span class="card-number">05</span>
             <span class="card-motif motif-growth" aria-hidden="true">
@@ -105,7 +129,7 @@
           </span>
         </button>
 
-        <button class="chapter-card is-haven" data-target="chapter-haven">
+        <button class="chapter-card is-haven crystal-sheen" data-target="chapter-haven">
           <span class="card-top">
             <span class="card-number">06</span>
             <span class="card-motif motif-haven" aria-hidden="true"></span>
@@ -203,23 +227,27 @@
         <p>Websites, content, and branding &mdash; designed, and continuously cared for.</p>
       </div>
       <div class="chapter-visual presence-visual" id="presenceVisual">
-        <div class="presence-item presence-facade glass-panel">
-          <div class="dot-line"><i class="dot"></i><i class="bar-line" style="width:46px"></i></div>
-          <div class="block-fill"></div>
-          <div class="bar-line" style="width:80%"></div>
-          <div class="bar-line" style="width:55%; opacity:.5;"></div>
+        <div class="presence-item presence-facade glass-panel crystal-sheen">
+          <div class="presence-item-inner">
+            <div class="dot-line"><i class="dot"></i><i class="bar-line" style="width:46px"></i></div>
+            <div class="block-fill"></div>
+            <div class="bar-line" style="width:80%"></div>
+            <div class="bar-line" style="width:55%; opacity:.5;"></div>
+          </div>
         </div>
-        <div class="presence-item presence-mobile glass-panel">
-          <div class="bar-line" style="width:30%; margin:0 auto;"></div>
-          <div class="block-fill"></div>
-          <div class="bar-line" style="width:70%"></div>
-          <div class="bar-line" style="width:45%; opacity:.5;"></div>
+        <div class="presence-item presence-mobile glass-panel crystal-sheen">
+          <div class="presence-item-inner">
+            <div class="bar-line" style="width:30%; margin:0 auto;"></div>
+            <div class="block-fill"></div>
+            <div class="bar-line" style="width:70%"></div>
+            <div class="bar-line" style="width:45%; opacity:.5;"></div>
+          </div>
         </div>
         <div class="presence-item presence-tile tile-1 glass-panel"><div class="block-fill"></div><div class="bar-line" style="width:60%"></div></div>
         <div class="presence-item presence-tile tile-2 glass-panel"><div class="block-fill"></div><div class="bar-line" style="width:50%"></div></div>
         <div class="presence-item presence-tile tile-3 glass-panel"><div class="block-fill"></div><div class="bar-line" style="width:65%"></div></div>
         <div class="presence-item presence-tile tile-4 glass-panel"><div class="block-fill"></div><div class="bar-line" style="width:55%"></div></div>
-        <div class="presence-item presence-brand glass-panel">
+        <div class="presence-item presence-brand glass-panel crystal-sheen">
           <div class="swatch-row"><i class="swatch swatch-1"></i><i class="swatch swatch-2"></i><i class="swatch swatch-3"></i></div>
           <div class="aa-mark">Aa</div>
           <div class="bar-line" style="width:70%"></div>
@@ -238,6 +266,9 @@
         <div class="chapter-text">
           <h2>Being great isn't enough. People need to discover you.</h2>
           <p>Discovery, trust, and consistency &mdash; carrying you further than you can reach alone.</p>
+          <div class="service-legend" id="visibilityLegend">
+            <span>Social Media</span><span>Email Marketing</span><span>SEO</span><span>Local SEO</span>
+          </div>
         </div>
         <div class="chapter-visual">
           <svg viewBox="0 0 460 460" id="visibilitySvg">
@@ -289,6 +320,9 @@
         <div class="chapter-text">
           <h2>More enquiries. Fewer late nights.</h2>
           <p>Less overwhelm. More time for the business you meant to build.</p>
+          <div class="service-legend" id="growthLegend">
+            <span>Automation</span><span>Reporting</span><span>Operations Support</span>
+          </div>
         </div>
       </div>
     </div>
@@ -298,6 +332,8 @@
   <section class="haven" id="chapter-haven" data-chapter="haven">
     <div class="haven-horizon" aria-hidden="true"></div>
     <div class="haven-glow" aria-hidden="true"></div>
+    <div class="haven-glow-lilac" aria-hidden="true"></div>
+    <div class="haven-particles" aria-hidden="true"></div>
 
     <div class="haven-bg-motif motif-hex reveal" aria-hidden="true">
       <svg viewBox="0 0 150 150"><polygon points="75,20 130,50 130,100 75,130 20,100 20,50" fill="none" stroke="currentColor" stroke-width="1.2"/></svg>
@@ -316,7 +352,7 @@
         <path d="M30,85 C22,102 18,150 24,198 L28,240 L48,240 L52,160 L68,160 L72,240 L92,240 L96,198 C102,150 98,102 90,85 C76,72 44,72 30,85 Z"/>
       </svg>
 
-      <a href="#contact" class="cta-pill reveal" style="--d:3">Book Your Free Operations Audit</a>
+      <a href="#contact" class="cta-pill crystal-sheen reveal" style="--d:3">Book Your Free Operations Audit</a>
     </div>
   </section>
 
