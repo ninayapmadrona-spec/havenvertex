@@ -403,9 +403,10 @@
         <span class="audience-pill reveal" style="--d:3">Growing Brands</span>
       </div>
 
+      <p class="globe-compare-label">Option A — animated 2D map</p>
       <div class="audience-globe reveal" style="--d:4">
         <div class="globe-glow" aria-hidden="true"></div>
-        <div class="globe-frame">
+        <div class="globe-frame globe-frame-sheen">
           <svg class="audience-globe-svg" viewBox="-20 -20 840 440" aria-hidden="true">
             <ellipse class="globe-ring" cx="400" cy="200" rx="410" ry="205"/>
             <g class="globe-dots">
@@ -1056,6 +1057,14 @@
         <p class="audience-globe-caption">12+ years connecting with businesses online, worldwide</p>
         <p class="audience-globe-visitor-note" aria-live="polite"></p>
       </div>
+
+      <p class="globe-compare-label">Option B — rotating 3D globe</p>
+      <div class="audience-globe3d reveal" style="--d:4">
+        <div class="globe-glow" aria-hidden="true"></div>
+        <canvas id="audienceGlobe3d" class="audience-globe3d-canvas" aria-hidden="true"></canvas>
+        <p class="audience-globe-caption">12+ years connecting with businesses online, worldwide</p>
+        <p class="audience-globe3d-visitor-note" aria-live="polite"></p>
+      </div>
     </div>
   </section>
 
@@ -1105,5 +1114,6 @@
 </footer>
 
 <script src="assets/js/main.js"></script>
+<script type="module" src="assets/js/globe3d.js"></script>
 </body>
 </html>

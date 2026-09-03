@@ -35,7 +35,27 @@
     heroVideoObserver.observe(heroVideo);
   }
 
-  /* ---- Audience globe: highlight the visitor's city once located ---- */
+  /* ---- Visitor location: shared pub/sub so both map versions can react ----
+     Late subscribers get replayed the last known country (avoids a race with
+     the module-script globe3d.js, which may init after this fetch resolves). */
+  window.__hvVisitorCountry = window.__hvVisitorCountry || null;
+  window.__hvVisitorHandlers = window.__hvVisitorHandlers || [];
+  window.__hvOnVisitorLocated = function (fn) {
+    window.__hvVisitorHandlers.push(fn);
+    if (window.__hvVisitorCountry) fn(window.__hvVisitorCountry);
+  };
+  window.__hvLocateVisitor = function (countryCode) {
+    if (!countryCode) return;
+    window.__hvVisitorCountry = String(countryCode).toUpperCase();
+    window.__hvVisitorHandlers.forEach((fn) => { try { fn(window.__hvVisitorCountry); } catch (e) { /* one bad subscriber shouldn't break the rest */ } });
+  };
+
+  fetch('https://get.geojs.io/v1/ip/geo.json')
+    .then((r) => (r.ok ? r.json() : null))
+    .then((data) => { if (data && data.country_code) window.__hvLocateVisitor(data.country_code); })
+    .catch(() => { /* no network / blocked / unsupported country: leave the ambient map as-is */ });
+
+  /* ---- 2D audience map: highlight the visitor's city once located ---- */
   (() => {
     const svg = document.querySelector('.audience-globe-svg');
     if (!svg) return;
@@ -64,19 +84,11 @@
       setNote("You're in Australia — right in our home market.");
     }
 
-    // Exposed for manual testing (e.g. from the console or Playwright): __hvLocateVisitor('US')
-    window.__hvLocateVisitor = function (countryCode) {
-      if (!countryCode) return;
-      const code = String(countryCode).toUpperCase();
+    window.__hvOnVisitorLocated((code) => {
       if (code === 'AU') { highlightHub(); return; }
       const city = COUNTRY_TO_CITY[code];
       if (city) highlightCity(city);
-    };
-
-    fetch('https://get.geojs.io/v1/ip/geo.json')
-      .then(r => (r.ok ? r.json() : null))
-      .then(data => { if (data && data.country_code) window.__hvLocateVisitor(data.country_code); })
-      .catch(() => { /* no network / blocked / unsupported country: leave the ambient map as-is */ });
+    });
   })();
 
   const railDots = Array.from(document.querySelectorAll('.rail-dot'));
