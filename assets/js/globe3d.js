@@ -2,9 +2,9 @@ import createGlobe from './vendor/cobe.esm.js';
 
 const canvas = document.getElementById('audienceGlobe3d');
 if (canvas) {
-  const purple500 = [139 / 255, 92 / 255, 246 / 255];
-  const purple700 = [109 / 255, 40 / 255, 217 / 255];
-  const amber = [245 / 255, 158 / 255, 11 / 255];
+  const nodeColor = [167 / 255, 139 / 255, 250 / 255]; // bright lavender — city/hub dots
+  const arcColor = [56 / 255, 189 / 255, 248 / 255]; // cyan-blue glow lines, like the reference
+  const amber = [245 / 255, 158 / 255, 11 / 255]; // visitor highlight — warm, reads like a lit-up city
 
   const CITIES = [
     { id: 'New York', lat: 40.7128, lon: -74.0060 },
@@ -27,13 +27,13 @@ if (canvas) {
     const markers = CITIES.map((c) => ({
       location: [c.lat, c.lon],
       size: c.id === highlightCity ? 0.09 : 0.05,
-      color: c.id === highlightCity ? amber : purple700
+      color: c.id === highlightCity ? amber : nodeColor
     }));
-    markers.push({ location: [HUB.lat, HUB.lon], size: 0.09, color: purple700 });
+    markers.push({ location: [HUB.lat, HUB.lon], size: 0.09, color: nodeColor });
     const arcs = CITIES.map((c) => ({
       from: [HUB.lat, HUB.lon],
       to: [c.lat, c.lon],
-      color: c.id === highlightCity ? amber : purple500
+      color: c.id === highlightCity ? amber : arcColor
     }));
     return { markers, arcs };
   }
@@ -55,14 +55,14 @@ if (canvas) {
     height: width * 2,
     phi,
     theta: 0.3,
-    dark: 0,
-    diffuse: 1.2,
+    dark: 1,
+    diffuse: 1.3,
     mapSamples: 16000,
-    mapBrightness: 6,
-    baseColor: [0.93, 0.9, 0.99],
-    markerColor: purple700,
-    glowColor: [0.78, 0.68, 0.96],
-    arcColor: purple500,
+    mapBrightness: 9,
+    baseColor: [0.05, 0.05, 0.1],
+    markerColor: nodeColor,
+    glowColor: [0.32, 0.26, 0.55],
+    arcColor,
     arcWidth: 2,
     arcHeight: 0.4,
     markers: initial.markers,
