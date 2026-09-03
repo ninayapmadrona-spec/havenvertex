@@ -361,9 +361,18 @@ svg{ display:block; }
   margin:56px 0 0; font-size:11px; font-weight:800; letter-spacing:.14em; text-transform:uppercase;
   color:var(--ink-faint);
 }
-.audience-globe3d{ position:relative; margin:22px auto 0; max-width:520px; }
+.audience-globe3d{ position:relative; margin:22px auto 0; max-width:560px; }
+.globe3d-stack{ position:relative; }
 .audience-globe3d-canvas{ width:100%; aspect-ratio:1; display:block; margin:0 auto; }
-.audience-globe3d-visitor-note{ margin-top:6px; font-size:.9rem; font-weight:700; color:#B45309; letter-spacing:.02em; min-height:1.3em; }
+.globe3d-stats{ display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-top:8px; }
+.globe3d-stat{
+  display:flex; flex-direction:column; align-items:center; gap:2px; padding:12px 6px;
+  background:#fff; border:1px solid var(--glass-border); border-radius:14px; box-shadow:0 10px 24px rgba(76,29,149,.1);
+}
+.globe3d-stat-num{ font-family:var(--font-display); font-style:italic; font-size:1.15rem; color:var(--ink-accent); }
+.globe3d-stat-label{ font-size:10px; font-weight:700; letter-spacing:.03em; color:var(--ink-soft); text-align:center; }
+.audience-globe3d-visitor-note{ margin-top:14px; font-size:.9rem; font-weight:700; color:#B45309; letter-spacing:.02em; min-height:1.3em; }
+@media (max-width:600px){ .globe3d-stats{ grid-template-columns:repeat(2,1fr); } }
 
 /* ============ FINAL CTA ============ */
 .cta-section{ background:linear-gradient(160deg, var(--bg-mid), var(--purple-700)); color:#fff; text-align:center; overflow:hidden; position:relative; }

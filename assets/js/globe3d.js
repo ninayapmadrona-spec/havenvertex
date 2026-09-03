@@ -1,10 +1,10 @@
-import createGlobe from './vendor/cobe.esm.js';
+import * as THREE from './vendor/three.module.min.js';
 
 const canvas = document.getElementById('audienceGlobe3d');
 if (canvas) {
-  const nodeColor = [167 / 255, 139 / 255, 250 / 255]; // bright lavender — city/hub dots
-  const arcColor = [56 / 255, 189 / 255, 248 / 255]; // cyan-blue glow lines, like the reference
-  const amber = [245 / 255, 158 / 255, 11 / 255]; // visitor highlight — warm, reads like a lit-up city
+  const purple = 0x8b5cf6;
+  const purpleDark = 0x6d28d9;
+  const amber = 0xf59e0b;
 
   const CITIES = [
     { id: 'New York', lat: 40.7128, lon: -74.0060 },
@@ -16,72 +16,132 @@ if (canvas) {
     { id: 'Tokyo', lat: 35.6762, lon: 139.6503 },
     { id: 'Singapore', lat: 1.3521, lon: 103.8198 }
   ];
-  const HUB = { lat: -33.8688, lon: 151.2093 }; // Australia region — same target-market hub as the 2D map
+  const HUB = { lat: -33.8688, lon: 151.2093 }; // Australia region — target-market hub, no office disclosed
 
   const COUNTRY_TO_CITY = {
     US: 'New York', GB: 'London', CA: 'Toronto', ZA: 'Cape Town',
     BR: 'Sao Paulo', IN: 'Mumbai', JP: 'Tokyo', SG: 'Singapore'
   };
 
-  function buildState(highlightCity) {
-    const markers = CITIES.map((c) => ({
-      location: [c.lat, c.lon],
-      size: c.id === highlightCity ? 0.09 : 0.05,
-      color: c.id === highlightCity ? amber : nodeColor
-    }));
-    markers.push({ location: [HUB.lat, HUB.lon], size: 0.09, color: nodeColor });
-    const arcs = CITIES.map((c) => ({
-      from: [HUB.lat, HUB.lon],
-      to: [c.lat, c.lon],
-      color: c.id === highlightCity ? amber : arcColor
-    }));
-    return { markers, arcs };
+  const RADIUS = 1;
+
+  function latLonToVec3(lat, lon, radius) {
+    const phi = (90 - lat) * (Math.PI / 180);
+    const theta = (lon + 180) * (Math.PI / 180);
+    return new THREE.Vector3(
+      -radius * Math.sin(phi) * Math.cos(theta),
+      radius * Math.cos(phi),
+      radius * Math.sin(phi) * Math.sin(theta)
+    );
   }
 
-  let width = 0;
-  let highlighted = null;
-  const onResize = () => { width = canvas.offsetWidth; };
+  // Simple person-silhouette icon, drawn to a canvas and used as a sprite texture.
+  function makeMarkerTexture(hex) {
+    const c = document.createElement('canvas');
+    c.width = 64; c.height = 64;
+    const ctx = c.getContext('2d');
+    ctx.fillStyle = hex;
+    ctx.beginPath();
+    ctx.arc(32, 20, 11, 0, Math.PI * 2); // head
+    ctx.fill();
+    ctx.beginPath();
+    ctx.moveTo(15, 58);
+    ctx.quadraticCurveTo(16, 34, 32, 33);
+    ctx.quadraticCurveTo(48, 34, 49, 58);
+    ctx.closePath();
+    ctx.fill(); // body
+    return new THREE.CanvasTexture(c);
+  }
+
+  const markerTexPurple = makeMarkerTexture('#C4B5FD');
+  const markerTexAmber = makeMarkerTexture('#FDE68A');
+
+  function makeArcCurve(fromLL, toLL) {
+    const from = latLonToVec3(fromLL.lat, fromLL.lon, RADIUS);
+    const to = latLonToVec3(toLL.lat, toLL.lon, RADIUS);
+    const mid = from.clone().add(to).multiplyScalar(0.5);
+    const liftFactor = 1 + from.distanceTo(to) * 0.45;
+    mid.normalize().multiplyScalar(RADIUS * liftFactor);
+    return new THREE.QuadraticBezierCurve3(from, mid, to);
+  }
+
+  // ---- Scene setup ----
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 10);
+  camera.position.set(0, 0, 2.6);
+
+  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+
+  const globeGroup = new THREE.Group();
+  globeGroup.rotation.x = 0.25;
+  scene.add(globeGroup);
+
+  const textureLoader = new THREE.TextureLoader();
+  const earthTexture = textureLoader.load('assets/img/earth-night.jpg');
+  const sphere = new THREE.Mesh(
+    new THREE.SphereGeometry(RADIUS, 64, 64),
+    new THREE.MeshBasicMaterial({ map: earthTexture })
+  );
+  globeGroup.add(sphere);
+
+  // Faint purple lat/long grid for a "tech network" feel over the photo texture
+  const grid = new THREE.Mesh(
+    new THREE.SphereGeometry(RADIUS * 1.001, 24, 16),
+    new THREE.MeshBasicMaterial({ color: purple, wireframe: true, transparent: true, opacity: 0.06 })
+  );
+  globeGroup.add(grid);
+
+  const arcObjects = {};
+  const markerObjects = {};
+
+  CITIES.forEach((c) => {
+    const curve = makeArcCurve(HUB, c);
+    const points = curve.getPoints(64);
+    const geom = new THREE.BufferGeometry().setFromPoints(points);
+    const mat = new THREE.LineDashedMaterial({ color: 0x38bdf8, dashSize: 0.045, gapSize: 0.03, transparent: true, opacity: 0.85 });
+    const line = new THREE.Line(geom, mat);
+    line.computeLineDistances();
+    globeGroup.add(line);
+    arcObjects[c.id] = line;
+
+    const marker = new THREE.Sprite(new THREE.SpriteMaterial({ map: markerTexPurple, depthTest: true, transparent: true }));
+    const pos = latLonToVec3(c.lat, c.lon, RADIUS * 1.01);
+    marker.position.copy(pos);
+    marker.scale.set(0.11, 0.11, 1);
+    globeGroup.add(marker);
+    markerObjects[c.id] = marker;
+  });
+
+  const hubMarker = new THREE.Sprite(new THREE.SpriteMaterial({ map: markerTexPurple, depthTest: true, transparent: true }));
+  hubMarker.position.copy(latLonToVec3(HUB.lat, HUB.lon, RADIUS * 1.01));
+  hubMarker.scale.set(0.15, 0.15, 1);
+  globeGroup.add(hubMarker);
+
+  function onResize() {
+    const size = canvas.clientWidth || canvas.parentElement.offsetWidth;
+    renderer.setSize(size, size, false);
+    camera.aspect = 1;
+    camera.updateProjectionMatrix();
+  }
   window.addEventListener('resize', onResize);
   onResize();
 
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  let phi = 0.6;
+  if (reduceMotion) globeGroup.rotation.y = 0.6;
+
   let visible = true;
-
-  const initial = buildState(null);
-  const globe = createGlobe(canvas, {
-    devicePixelRatio: Math.min(window.devicePixelRatio || 1, 2),
-    width: width * 2,
-    height: width * 2,
-    phi,
-    theta: 0.3,
-    dark: 1,
-    diffuse: 1.3,
-    mapSamples: 16000,
-    mapBrightness: 9,
-    baseColor: [0.05, 0.05, 0.1],
-    markerColor: nodeColor,
-    glowColor: [0.32, 0.26, 0.55],
-    arcColor,
-    arcWidth: 2,
-    arcHeight: 0.4,
-    markers: initial.markers,
-    arcs: initial.arcs
-  });
-
-  function frame() {
-    if (visible && !reduceMotion) {
-      phi += 0.0045;
-      globe.update({ phi, width: width * 2, height: width * 2 });
-    }
-    requestAnimationFrame(frame);
-  }
-  requestAnimationFrame(frame);
-
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => { visible = entry.isIntersecting; });
   }, { threshold: 0.1 });
   observer.observe(canvas);
+
+  function animate() {
+    if (visible && !reduceMotion) globeGroup.rotation.y += 0.0032;
+    renderer.render(scene, camera);
+    requestAnimationFrame(animate);
+  }
+  requestAnimationFrame(animate);
 
   function setNote(text) {
     const note = document.querySelector('.audience-globe3d-visitor-note');
@@ -90,14 +150,21 @@ if (canvas) {
 
   window.__hvOnVisitorLocated((code) => {
     if (code === 'AU') {
+      hubMarker.material.map = markerTexAmber;
+      hubMarker.scale.set(0.18, 0.18, 1);
       setNote("You're in Australia — right in our home market.");
       return;
     }
     const city = COUNTRY_TO_CITY[code];
     if (!city) return;
-    highlighted = city;
-    const state = buildState(highlighted);
-    globe.update(state);
+    if (markerObjects[city]) {
+      markerObjects[city].material.map = markerTexAmber;
+      markerObjects[city].scale.set(0.15, 0.15, 1);
+    }
+    if (arcObjects[city]) {
+      arcObjects[city].material.color.setHex(amber);
+      arcObjects[city].material.opacity = 1;
+    }
     setNote(`You're near ${city} — let's connect.`);
   });
 }
