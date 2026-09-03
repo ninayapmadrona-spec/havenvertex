@@ -362,6 +362,10 @@ svg{ display:block; }
   color:var(--ink-faint);
 }
 .audience-globe3d{ position:relative; margin:22px auto 0; max-width:560px; }
+.audience-globe3d .globe-glow{
+  background:radial-gradient(ellipse 65% 75% at 50% 50%, rgba(168,85,247,.4), rgba(139,92,246,.18) 55%, transparent 75%);
+  filter:blur(26px);
+}
 .globe3d-stack{ position:relative; }
 .audience-globe3d-canvas{ width:100%; aspect-ratio:1; display:block; margin:0 auto; }
 .globe3d-stats{ display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-top:8px; }

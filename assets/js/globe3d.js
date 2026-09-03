@@ -4,6 +4,7 @@ const canvas = document.getElementById('audienceGlobe3d');
 if (canvas) {
   const purple = 0x8b5cf6;
   const purpleDark = 0x6d28d9;
+  const arcPurple = 0xa855f7;
   const amber = 0xf59e0b;
 
   const CITIES = [
@@ -88,9 +89,38 @@ if (canvas) {
   // Faint purple lat/long grid for a "tech network" feel over the photo texture
   const grid = new THREE.Mesh(
     new THREE.SphereGeometry(RADIUS * 1.001, 24, 16),
-    new THREE.MeshBasicMaterial({ color: purple, wireframe: true, transparent: true, opacity: 0.06 })
+    new THREE.MeshBasicMaterial({ color: purple, wireframe: true, transparent: true, opacity: 0.09 })
   );
   globeGroup.add(grid);
+
+  // Bright purple rim-light glow around the sphere's silhouette (fresnel falloff)
+  const atmosphere = new THREE.Mesh(
+    new THREE.SphereGeometry(RADIUS * 1.12, 48, 48),
+    new THREE.ShaderMaterial({
+      uniforms: { glowColor: { value: new THREE.Color(purple) } },
+      vertexShader: `
+        varying float vIntensity;
+        void main() {
+          vec3 vNormal = normalize(normalMatrix * normal);
+          vec3 viewDir = normalize((modelViewMatrix * vec4(position, 1.0)).xyz);
+          vIntensity = pow(1.0 - abs(dot(vNormal, viewDir)), 3.0);
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        }
+      `,
+      fragmentShader: `
+        varying float vIntensity;
+        uniform vec3 glowColor;
+        void main() {
+          gl_FragColor = vec4(glowColor, vIntensity * 0.85);
+        }
+      `,
+      side: THREE.BackSide,
+      blending: THREE.AdditiveBlending,
+      transparent: true,
+      depthWrite: false
+    })
+  );
+  scene.add(atmosphere);
 
   const arcObjects = {};
   const markerObjects = {};
@@ -99,7 +129,7 @@ if (canvas) {
     const curve = makeArcCurve(HUB, c);
     const points = curve.getPoints(64);
     const geom = new THREE.BufferGeometry().setFromPoints(points);
-    const mat = new THREE.LineDashedMaterial({ color: 0x38bdf8, dashSize: 0.045, gapSize: 0.03, transparent: true, opacity: 0.85 });
+    const mat = new THREE.LineDashedMaterial({ color: arcPurple, dashSize: 0.045, gapSize: 0.03, transparent: true, opacity: 0.9 });
     const line = new THREE.Line(geom, mat);
     line.computeLineDistances();
     globeGroup.add(line);
