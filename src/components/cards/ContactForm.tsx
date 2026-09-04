@@ -33,6 +33,7 @@ export function ContactForm() {
       <div className="grid gap-4 sm:grid-cols-2">
         <input
           required
+          id="contact-name"
           name="name"
           placeholder="Your name"
           className="rounded-2xl border border-white/15 bg-white/5 px-5 py-3.5 text-sm text-white placeholder:text-white/40 outline-none transition-colors focus:border-accent"

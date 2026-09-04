@@ -3,12 +3,13 @@
 import { motion } from "framer-motion";
 import { AuroraBackground } from "@/components/decor/AuroraBackground";
 import { ChapterSection } from "@/components/layout/ChapterSection";
-import { ChapterTag, SectionKicker } from "@/components/ui/SectionKicker";
+import { ChapterTag } from "@/components/ui/SectionKicker";
+import { keyStats } from "@/lib/content";
 
 const pills = [
-  "12+ Years Experience",
-  "Global Client Experience",
-  "Australian Business Experience",
+  `${keyStats.yearsExperience} Years Experience`,
+  `${keyStats.projectsSupported} Projects Supported`,
+  `${keyStats.clientReach} Clients`,
 ];
 
 export function Card02MeetNina() {
@@ -34,27 +35,19 @@ export function Card02MeetNina() {
           <ChapterTag index="02" label="Meet Nina" />
 
           <h2 className="mt-6 font-heading text-4xl font-medium leading-tight sm:text-5xl">
-            The Founder Behind{" "}
-            <span className="text-gradient font-semibold">Haven Vertex.</span>
+            Hi, I&rsquo;m{" "}
+            <span className="text-gradient font-semibold">Nina.</span>
           </h2>
 
-          <p className="mt-3 font-heading text-xl italic text-secondary/80">
-            &ldquo;Good systems, brighter tomorrows.&rdquo;
-          </p>
-
           <p className="mt-6 max-w-xl text-base leading-relaxed text-plum/75">
-            With more than a decade spent inside websites, marketing engines
-            and back-office operations, Nina founded Haven Vertex to give
-            growing businesses what most can&rsquo;t afford in-house — a
-            steady, skilled partner who keeps the details moving so the
-            people behind the business can focus on what they do best.
+            For more than 12 years, I&rsquo;ve helped businesses stay
+            visible, organized, and growing through websites, content, SEO,
+            systems, and digital operations.
           </p>
 
           <p className="mt-4 max-w-xl text-base leading-relaxed text-plum/75">
-            From global client work to a dedicated focus on Australian
-            businesses, the approach stays the same: fewer dropped balls,
-            clearer systems, and a partner who treats your business like it
-            matters — because it does.
+            Haven Vertex was built to bring all of these services together
+            under one trusted partner.
           </p>
 
           <div className="mt-8 flex flex-wrap gap-3">
@@ -68,10 +61,6 @@ export function Card02MeetNina() {
             ))}
           </div>
         </div>
-      </div>
-
-      <div className="mt-16">
-        <SectionKicker>People First</SectionKicker>
       </div>
     </ChapterSection>
   );

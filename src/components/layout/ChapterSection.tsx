@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import type { ReactNode } from "react";
 
 type ChapterSectionProps = {
@@ -22,6 +22,8 @@ export function ChapterSection({
   dark = false,
   className = "",
 }: ChapterSectionProps) {
+  const prefersReducedMotion = useReducedMotion();
+
   return (
     <section
       id={id}
@@ -30,8 +32,8 @@ export function ChapterSection({
       } ${className}`}
     >
       <motion.div
-        initial={{ opacity: 0, scale: 0.97, y: 24 }}
-        whileInView={{ opacity: 1, scale: 1, y: 0 }}
+        initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, scale: 0.97, y: 24 }}
+        whileInView={prefersReducedMotion ? { opacity: 1 } : { opacity: 1, scale: 1, y: 0 }}
         viewport={{ once: false, amount: 0.15 }}
         transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
         className="relative z-10 mx-auto w-full max-w-7xl px-6 py-24 sm:px-10 md:pl-28 lg:px-16 lg:pl-32"

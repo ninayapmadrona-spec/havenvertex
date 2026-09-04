@@ -23,6 +23,24 @@
     background-color: #b57edc55;
     color: #22142f;
   }
+
+  :focus-visible {
+    outline: 2px solid #6a1b9a;
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .animate-float,
+  .animate-drift,
+  .animate-shimmer {
+    animation: none !important;
+  }
 }
 
 @layer components {

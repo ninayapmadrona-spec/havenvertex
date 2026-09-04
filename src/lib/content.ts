@@ -3,7 +3,7 @@
 
 export type Chapter = {
   id: string;
-  index: string; // "01".."07"
+  index: string; // "01".."08"
   label: string; // short nav label shown on the side rail
 };
 
@@ -12,9 +12,10 @@ export const chapters: Chapter[] = [
   { id: "meet-nina", index: "02", label: "Meet Nina" },
   { id: "services", index: "03", label: "Services" },
   { id: "experience", index: "04", label: "Experience" },
-  { id: "portfolio", index: "05", label: "Portfolio" },
-  { id: "stories", index: "06", label: "Success Stories" },
-  { id: "contact", index: "07", label: "Let's Build Together" },
+  { id: "clients", index: "05", label: "Clients" },
+  { id: "portfolio", index: "06", label: "Portfolio" },
+  { id: "stories", index: "07", label: "Success Stories" },
+  { id: "contact", index: "08", label: "Let's Build Together" },
 ];
 
 export const brand = {
@@ -22,6 +23,7 @@ export const brand = {
   tagline: "People | Systems | Possibilities",
   footerLine: "A Brighter Tomorrow Together.",
   calendlyUrl: "https://calendly.com/haven-vertex/discovery-call",
+  contactEmail: "hello@havenvertex.com",
 };
 
 export const services = [
@@ -57,74 +59,102 @@ export const services = [
   },
 ];
 
+// The three real, verified figures behind Haven Vertex — reused everywhere a
+// stat appears (Experience, Meet Nina, Success Stories) so the numbers never
+// drift out of sync.
+export const keyStats = {
+  yearsExperience: "12+",
+  projectsSupported: "100+",
+  clientReach: "Australian & International",
+};
+
 export const experienceStats = [
-  { value: "12+", label: "Years Experience" },
-  { value: "100+", label: "Websites & Marketing Projects" },
-  { value: "4+", label: "Years With Australian Businesses" },
-  { value: "100%", label: "Commitment To Your Success" },
+  { value: keyStats.yearsExperience, label: "Years Experience" },
+  { value: keyStats.projectsSupported, label: "Projects Supported" },
 ];
 
-export const industries = [
-  { name: "Hospitality & Restaurants", coord: { x: "18%", y: "58%" } },
-  { name: "Solar & Renewable Energy", coord: { x: "50%", y: "72%" } },
-  { name: "Clubs & Community", coord: { x: "82%", y: "40%" } },
-  { name: "Coaching & Professional Services", coord: { x: "68%", y: "24%" } },
-  { name: "Education", coord: { x: "34%", y: "30%" } },
+export const experienceFocusAreas = [
+  "Website Management",
+  "SEO",
+  "Content Support",
+  "Digital Operations",
 ];
 
-export const portfolio = [
+// Portfolio categories Haven Vertex works across — used by both the
+// Experience diagram and the Portfolio chapter so the two stay consistent.
+export const portfolioCategories = [
   {
-    tag: "Restaurant & Hospitality",
-    title: "Good Food Brings People Together",
-    services: "Website Management | Content Support",
-    theme: "from-[#3a0f52] to-[#22142f]",
+    slug: "hospitality-clubs",
+    name: "Hospitality & Clubs",
+    description: "Websites and digital support for clubs, restaurants and hospitality venues.",
+    coord: { x: "18%", y: "58%" },
   },
   {
-    tag: "Solar & Energy",
-    title: "Clean Energy, Brighter Tomorrow",
-    services: "Website Updates | SEO | Content",
-    theme: "from-[#1f2a1f] to-[#173318]",
+    slug: "solar-renewable-energy",
+    name: "Solar & Renewable Energy",
+    description: "SEO and content for solar and renewable energy providers.",
+    coord: { x: "50%", y: "78%" },
   },
   {
-    tag: "Clubs & Community",
-    title: "More Than a Game",
-    services: "Website Management | Digital Support",
-    theme: "from-[#0f2a3a] to-[#12222f]",
+    slug: "education",
+    name: "Education",
+    description: "Website management and systems for education and training providers.",
+    coord: { x: "82%", y: "40%" },
   },
   {
-    tag: "Education & Coaching",
-    title: "Learning, Refined",
-    services: "Website Management | Systems & Automation",
-    theme: "from-[#3a1f0f] to-[#2f2012]",
+    slug: "professional-services",
+    name: "Professional Services",
+    description: "Digital operations and content support for professional service firms.",
+    coord: { x: "60%", y: "22%" },
   },
 ];
 
-export const testimonials = [
-  {
-    quote:
-      "Haven Vertex took our scattered admin and turned it into a system that just works. Our website finally reflects how good the business actually is.",
-    name: "Hospitality Owner",
-    location: "Melbourne, VIC",
-    rating: 5,
-  },
-  {
-    quote:
-      "More than a virtual assistant — a genuine partner in how we operate day to day. Response times are excellent and nothing falls through the cracks.",
-    name: "Clubs & Community Manager",
-    location: "Brisbane, QLD",
-    rating: 5,
-  },
-  {
-    quote:
-      "Our search visibility and enquiries both lifted within the first quarter. Haven Vertex handles the details so we can focus on the work.",
-    name: "Renewable Energy Director",
-    location: "Perth, WA",
-    rating: 5,
-  },
+// Portfolio is deliberately structured around categories rather than
+// fabricated project names — each entry's `caseStudies` array starts empty
+// and is meant to be filled in with real, approved client work as it
+// becomes available. See public/portfolio/README.md.
+export const portfolio = portfolioCategories.map((category) => ({
+  ...category,
+  caseStudies: [] as Array<{
+    title: string;
+    summary: string;
+    servicesProvided: string;
+    image?: string;
+  }>,
+}));
+
+// Real, named clients Haven Vertex has worked with. Logo files are optional —
+// see ClientLogo / public/clients/README.md — the site falls back to a clean
+// typographic wordmark until real logo assets are supplied.
+export const clients = [
+  { name: "Bexley RSL", slug: "bexley-rsl" },
+  { name: "Manly Leagues", slug: "manly-leagues" },
+  { name: "The Chatswood", slug: "the-chatswood" },
+  { name: "ILG", slug: "ilg" },
+  { name: "Satellite Solar", slug: "satellite-solar" },
+  { name: "TT New Energy", slug: "tt-new-energy" },
+  { name: "Learning Made Simple", slug: "learning-made-simple" },
 ];
+
+// Success Stories is intentionally content-empty rather than fabricated.
+// videoTestimonials / writtenTestimonials start blank and are meant to be
+// populated with real client media as it's collected — see the card itself
+// for how empty state is presented.
+export const videoTestimonials: Array<{
+  clientName: string;
+  role: string;
+  videoUrl: string;
+  posterImage?: string;
+}> = [];
+
+export const writtenTestimonials: Array<{
+  quote: string;
+  name: string;
+  company: string;
+}> = [];
 
 export const trustSignals = [
-  { value: "5.0", label: "Average Client Rating" },
-  { value: "10+", label: "Long-Term Partnerships" },
-  { value: "100%", label: "Project Completion Rate" },
+  { value: keyStats.yearsExperience, label: "Years Experience" },
+  { value: keyStats.projectsSupported, label: "Projects Supported" },
+  { value: keyStats.clientReach, label: "Client Reach" },
 ];

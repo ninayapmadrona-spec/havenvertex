@@ -4,6 +4,7 @@ import {
   motion,
   useMotionTemplate,
   useMotionValue,
+  useReducedMotion,
   useSpring,
 } from "framer-motion";
 import { useState, type MouseEvent, type ReactNode } from "react";
@@ -22,6 +23,7 @@ type TiltCardProps = {
  * sibling-blur focus effect on hover.
  */
 export function TiltCard({ children, className = "", glow = true }: TiltCardProps) {
+  const prefersReducedMotion = useReducedMotion();
   const rotateX = useSpring(0, { stiffness: 150, damping: 18 });
   const rotateY = useSpring(0, { stiffness: 150, damping: 18 });
   const mouseX = useMotionValue(50);
@@ -29,6 +31,7 @@ export function TiltCard({ children, className = "", glow = true }: TiltCardProp
   const [isHovering, setIsHovering] = useState(false);
 
   function handleMouseMove(e: MouseEvent<HTMLDivElement>) {
+    if (prefersReducedMotion) return;
     const rect = e.currentTarget.getBoundingClientRect();
     const px = (e.clientX - rect.left) / rect.width;
     const py = (e.clientY - rect.top) / rect.height;
@@ -51,9 +54,9 @@ export function TiltCard({ children, className = "", glow = true }: TiltCardProp
       onMouseMove={handleMouseMove}
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={handleMouseLeave}
-      whileHover={{ scale: 1.03, y: -6 }}
+      whileHover={prefersReducedMotion ? undefined : { scale: 1.03, y: -6 }}
       transition={{ type: "spring", stiffness: 220, damping: 20 }}
-      style={{ rotateX, rotateY, transformPerspective: 900 }}
+      style={prefersReducedMotion ? undefined : { rotateX, rotateY, transformPerspective: 900 }}
       className={`tilt-card relative overflow-hidden rounded-3xl glass-panel shadow-glass hover:shadow-glow ${className}`}
     >
       {glow && (

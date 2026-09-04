@@ -1,6 +1,12 @@
 "use client";
 
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import {
+  motion,
+  useMotionValue,
+  useReducedMotion,
+  useSpring,
+  useTransform,
+} from "framer-motion";
 import { useEffect } from "react";
 
 /**
@@ -16,6 +22,7 @@ export function AuroraBackground({
   variant?: "light" | "deep";
   className?: string;
 }) {
+  const prefersReducedMotion = useReducedMotion();
   const mx = useMotionValue(0);
   const my = useMotionValue(0);
   const sx = useSpring(mx, { stiffness: 40, damping: 20 });
@@ -24,16 +31,19 @@ export function AuroraBackground({
   const py = useTransform(sy, [-1, 1], [-24, 24]);
 
   useEffect(() => {
+    if (prefersReducedMotion) return;
     function onMove(e: PointerEvent) {
       mx.set((e.clientX / window.innerWidth) * 2 - 1);
       my.set((e.clientY / window.innerHeight) * 2 - 1);
     }
     window.addEventListener("pointermove", onMove);
     return () => window.removeEventListener("pointermove", onMove);
-  }, [mx, my]);
+  }, [mx, my, prefersReducedMotion]);
 
   const blobA = variant === "deep" ? "bg-accent/30" : "bg-primary/20";
   const blobB = variant === "deep" ? "bg-primary/40" : "bg-accent/25";
+  const driftClass = prefersReducedMotion ? "" : "animate-drift";
+  const floatClass = prefersReducedMotion ? "" : "animate-float";
 
   return (
     <div
@@ -42,15 +52,15 @@ export function AuroraBackground({
     >
       <motion.div
         style={{ x: px, y: py }}
-        className={`absolute -left-24 top-[-10%] h-[420px] w-[420px] rounded-full ${blobA} blur-[110px] animate-drift`}
+        className={`absolute -left-24 top-[-10%] h-[420px] w-[420px] rounded-full ${blobA} blur-[110px] ${driftClass}`}
       />
       <motion.div
         style={{ x: useTransform(px, (v) => -v), y: useTransform(py, (v) => -v) }}
-        className={`absolute -right-32 top-1/3 h-[480px] w-[480px] rounded-full ${blobB} blur-[130px] animate-float`}
+        className={`absolute -right-32 top-1/3 h-[480px] w-[480px] rounded-full ${blobB} blur-[130px] ${floatClass}`}
       />
       <motion.div
         style={{ x: px, y: useTransform(py, (v) => -v) }}
-        className={`absolute bottom-[-15%] left-1/3 h-[360px] w-[360px] rounded-full ${blobA} blur-[100px] animate-drift`}
+        className={`absolute bottom-[-15%] left-1/3 h-[360px] w-[360px] rounded-full ${blobA} blur-[100px] ${driftClass}`}
       />
       <svg
         className="absolute bottom-0 left-0 w-full opacity-40"

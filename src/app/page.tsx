@@ -4,9 +4,10 @@ import {
   Card02MeetNina,
   Card03Services,
   Card04Experience,
-  Card05Portfolio,
-  Card06Stories,
-  Card07Contact,
+  Card05Clients,
+  Card06Portfolio,
+  Card07Stories,
+  Card08Contact,
 } from "@/components/cards";
 
 export default function Home() {
@@ -16,9 +17,10 @@ export default function Home() {
       <Card02MeetNina />
       <Card03Services />
       <Card04Experience />
-      <Card05Portfolio />
-      <Card06Stories />
-      <Card07Contact />
+      <Card05Clients />
+      <Card06Portfolio />
+      <Card07Stories />
+      <Card08Contact />
     </CardExperience>
   );
 }
