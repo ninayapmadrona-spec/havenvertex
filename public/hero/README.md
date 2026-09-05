@@ -19,10 +19,9 @@ public/hero/handshake.jpg
 
 `HandshakeVisual` (`src/components/ui/HandshakeVisual.tsx`) picks it up
 automatically and layers the glow/particle "connection point" animation on
-top of it. Until that file exists, the chapter shows a plain, neutral
-placeholder card instead — deliberately not a stand-in illustration, since
-the brief calls for real commercial photography here, not an abstract
-substitute.
+top of it. Until that file exists, the component renders nothing at all —
+no placeholder box, icon, or "coming soon" text. Visitors just see the
+LuxuryLight background behind it, same as the rest of the page.
 
 I (Claude) can't generate or source this photo myself — no image-generation
 or stock-photo tool is available in this environment. This needs to be a
