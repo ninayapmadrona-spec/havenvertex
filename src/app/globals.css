@@ -38,8 +38,52 @@
 
   .animate-float,
   .animate-drift,
-  .animate-shimmer {
+  .animate-shimmer,
+  .animate-particle-drift,
+  .animate-glow-pulse,
+  .cta-orbit-particle {
     animation: none !important;
+  }
+}
+
+@layer components {
+  /* The tiny light particle that continuously travels the CTA button's
+     outer border — CSS motion-path, so it needs no JS per frame. */
+  .cta-orbit-wrap {
+    position: relative;
+  }
+  .cta-orbit-particle {
+    position: absolute;
+    inset: 0;
+    width: 7px;
+    height: 7px;
+    margin: auto 0 0 auto;
+    border-radius: 999px;
+    background: radial-gradient(circle, #ffffff 0%, #e9ddf7 45%, transparent 75%);
+    box-shadow: 0 0 8px 2px rgba(233, 221, 247, 0.9);
+    offset-path: inset(0 round 999px);
+    offset-distance: 0%;
+    offset-rotate: 0deg;
+    animation: cta-orbit-travel 3.6s linear infinite;
+    pointer-events: none;
+  }
+  @keyframes cta-orbit-travel {
+    to {
+      offset-distance: 100%;
+    }
+  }
+
+  /* Fallback for browsers without CSS motion-path support (e.g. older
+     Safari): the particle just sits as a quiet corner glint instead of
+     orbiting — still on-brand, never broken-looking. */
+  @supports not (offset-path: inset(0 round 999px)) {
+    .cta-orbit-particle {
+      animation: none;
+      top: 0;
+      right: 0;
+      left: auto;
+      bottom: auto;
+    }
   }
 }
 
