@@ -1,6 +1,7 @@
 import { CardExperience } from "@/components/layout/CardExperience";
 import {
   Card01Welcome,
+  CardHub,
   Card02MeetNina,
   Card03Services,
   Card04Experience,
@@ -14,6 +15,7 @@ export default function Home() {
   return (
     <CardExperience>
       <Card01Welcome />
+      <CardHub />
       <Card02MeetNina />
       <Card03Services />
       <Card04Experience />

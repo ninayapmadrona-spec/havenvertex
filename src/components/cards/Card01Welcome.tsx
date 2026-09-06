@@ -26,7 +26,7 @@ export function Card01Welcome() {
     if (transitioning) return;
     setTransitioning(true);
     window.setTimeout(() => {
-      document.getElementById("meet-nina")?.scrollIntoView({ behavior: "smooth" });
+      document.getElementById("hub")?.scrollIntoView({ behavior: "smooth" });
     }, 550);
     window.setTimeout(() => setTransitioning(false), 1400);
   }

@@ -9,6 +9,7 @@ export type Chapter = {
 
 export const chapters: Chapter[] = [
   { id: "welcome", index: "01", label: "Welcome" },
+  { id: "hub", index: "•", label: "Explore Vertex" },
   { id: "meet-nina", index: "02", label: "Meet Nina" },
   { id: "services", index: "03", label: "Services" },
   { id: "experience", index: "04", label: "Experience" },
@@ -67,6 +68,61 @@ export const keyStats = {
   projectsSupported: "100+",
   clientReach: "Australian & International",
 };
+
+// The Vertex Hub's seven glass panels — a horizontal coverflow menu between
+// the Welcome hero and the full chapters. Each panel's `target` is the
+// chapter id its own CTA scrolls to (opening that chapter fullscreen).
+export const hubPanels = [
+  {
+    id: "welcome",
+    target: "welcome",
+    icon: "sparkles",
+    label: "Welcome",
+    description: "Where it all begins.",
+  },
+  {
+    id: "about",
+    target: "meet-nina",
+    icon: "user",
+    label: "About",
+    description: "Meet Nina — 12+ years turning chaos into clarity.",
+  },
+  {
+    id: "services-hub",
+    target: "services",
+    icon: "laptop",
+    label: "Services",
+    description: "Websites, SEO, content and systems, all in one partner.",
+  },
+  {
+    id: "experience-hub",
+    target: "experience",
+    icon: "chart",
+    label: "Experience",
+    description: `${keyStats.yearsExperience} years, ${keyStats.projectsSupported} projects, real results.`,
+  },
+  {
+    id: "portfolio-hub",
+    target: "portfolio",
+    icon: "gallery",
+    label: "Portfolio",
+    description: "Real work across hospitality, solar, education & more.",
+  },
+  {
+    id: "clients-hub",
+    target: "clients",
+    icon: "users",
+    label: "Clients",
+    description: "Trusted by Bexley RSL, Manly Leagues & more.",
+  },
+  {
+    id: "contact-hub",
+    target: "contact",
+    icon: "mail",
+    label: "Contact",
+    description: "Let's build something brighter, together.",
+  },
+];
 
 export const experienceStats = [
   { value: keyStats.yearsExperience, label: "Years Experience" },

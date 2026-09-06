@@ -1,4 +1,5 @@
 export { Card01Welcome } from "./Card01Welcome";
+export { CardHub } from "./CardHub";
 export { Card02MeetNina } from "./Card02MeetNina";
 export { Card03Services } from "./Card03Services";
 export { Card04Experience } from "./Card04Experience";
