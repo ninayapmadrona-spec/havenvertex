@@ -10,18 +10,27 @@ import { useState } from "react";
  * the brand logo, just scaffolding. Replace /public/brand/logo.png with the
  * real, unaltered logo file to complete the brand.
  */
-export function LogoMark({ size = 40 }: { size?: number }) {
+export function LogoMark({
+  size = 40,
+  className,
+}: {
+  size?: number;
+  /** Responsive Tailwind sizing (e.g. "h-40 w-40 lg:h-80 lg:w-80"). When
+   * given, this controls the rendered size instead of the fixed `size` px —
+   * `size` still sets the `sizes` attribute hint for image loading. */
+  className?: string;
+}) {
   const [failed, setFailed] = useState(false);
 
   if (failed) {
     return (
       <svg
-        width={size}
-        height={size}
+        width={className ? undefined : size}
+        height={className ? undefined : size}
         viewBox="0 0 40 40"
         fill="none"
         aria-label="Haven Vertex"
-        className="drop-shadow-[0_0_10px_rgba(106,27,154,0.45)]"
+        className={className ?? "drop-shadow-[0_0_10px_rgba(106,27,154,0.45)]"}
       >
         <path
           d="M20 32 L8 14 Q14 18 20 12 Q26 18 32 14 Z"
@@ -39,8 +48,8 @@ export function LogoMark({ size = 40 }: { size?: number }) {
 
   return (
     <span
-      className="relative inline-flex items-center justify-center"
-      style={{ width: size, height: size }}
+      className={`relative inline-flex items-center justify-center ${className ?? ""}`}
+      style={className ? undefined : { width: size, height: size }}
     >
       <Image
         src="/brand/logo.png"
