@@ -25,8 +25,7 @@ export const brand = {
   footerLine: "A Brighter Tomorrow Together.",
   calendlyUrl: "https://calendly.com/haven-vertex/discovery-call",
   contactEmail: "hello@havenvertex.com",
-  // TODO: replace with Nina's real LinkedIn profile URL.
-  founderLinkedInUrl: "#",
+  founderLinkedInUrl: "https://www.linkedin.com/in/nina-ricci-madrona-002191a2/",
 };
 
 export const services = [
