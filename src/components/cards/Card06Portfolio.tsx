@@ -33,9 +33,9 @@ export function Card06Portfolio() {
           <span className="text-gradient font-semibold">Work.</span>
         </h2>
         <p className="mt-4 text-base leading-relaxed text-plum/75">
-          The industries Haven Vertex supports most. Case studies for each
-          category are being prepared and will appear here as real client
-          work is approved for showcase.
+          The industries Haven Vertex supports most — full case studies are
+          on the way. In the meantime, hear directly from the clients we
+          already support.
         </p>
       </div>
 
@@ -63,7 +63,7 @@ export function Card06Portfolio() {
 
                 {category.caseStudies.length === 0 ? (
                   <span className="mt-6 inline-flex w-fit items-center gap-2 rounded-full border border-primary/20 bg-white/50 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-wide text-secondary">
-                    Case studies coming soon
+                    Case study in progress
                   </span>
                 ) : (
                   <ul className="mt-6 space-y-3">
@@ -79,6 +79,20 @@ export function Card06Portfolio() {
             </motion.div>
           );
         })}
+      </div>
+
+      <div className="mt-10 text-center">
+        <button
+          type="button"
+          onClick={() =>
+            document
+              .getElementById("stories")
+              ?.scrollIntoView({ behavior: "smooth" })
+          }
+          className="text-sm font-semibold text-secondary transition-colors hover:text-primary"
+        >
+          See what real partnership looks like &rarr;
+        </button>
       </div>
     </ChapterSection>
   );
