@@ -1,10 +1,12 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Image from "next/image";
+import { Linkedin } from "lucide-react";
 import { AuroraBackground } from "@/components/decor/AuroraBackground";
 import { ChapterSection } from "@/components/layout/ChapterSection";
 import { ChapterTag } from "@/components/ui/SectionKicker";
-import { keyStats } from "@/lib/content";
+import { brand, keyStats } from "@/lib/content";
 
 const pills = [
   `${keyStats.yearsExperience} Years Experience`,
@@ -18,17 +20,43 @@ export function Card02MeetNina() {
       <AuroraBackground variant="light" />
 
       <div className="grid items-center gap-14 lg:grid-cols-[0.85fr_1.15fr]">
+        {/* The real photo, treated like Welcome's photography rather than
+            an illustrated stand-in: a tall portrait crop with a glass
+            caption bar carrying attribution and a LinkedIn link, instead
+            of a circular monogram. */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
+          initial={{ opacity: 0, scale: 0.94 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.7 }}
-          className="relative mx-auto flex h-64 w-64 items-center justify-center rounded-full bg-gradient-to-br from-primary via-secondary to-plum shadow-glow-lg sm:h-80 sm:w-80"
+          className="relative mx-auto aspect-[3/4] w-full max-w-sm overflow-hidden rounded-[2rem] shadow-glow-lg"
         >
-          <span className="font-heading text-7xl font-semibold text-white/90 sm:text-8xl">
-            N
-          </span>
-          <div className="absolute inset-0 rounded-full border border-white/20" />
+          <Image
+            src="/team/nina.jpg"
+            alt="Nina Madrona, Founder of Haven Vertex"
+            fill
+            sizes="(min-width: 1024px) 28vw, 80vw"
+            className="object-cover"
+          />
+          <div className="absolute inset-x-0 bottom-0 flex items-center justify-between gap-3 bg-white/70 px-5 py-4 backdrop-blur-md">
+            <div>
+              <p className="font-heading text-base font-semibold text-plum">
+                Nina Madrona
+              </p>
+              <p className="text-xs font-semibold uppercase tracking-wide text-secondary/80">
+                Founder, Haven Vertex
+              </p>
+            </div>
+            <a
+              href={brand.founderLinkedInUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Nina Madrona on LinkedIn"
+              className="grid h-9 w-9 flex-shrink-0 place-items-center rounded-full bg-primary text-white shadow-glow transition-transform hover:scale-105"
+            >
+              <Linkedin size={16} strokeWidth={2} />
+            </a>
+          </div>
         </motion.div>
 
         <div>
@@ -39,15 +67,12 @@ export function Card02MeetNina() {
             <span className="text-gradient font-semibold">Nina.</span>
           </h2>
 
-          <p className="mt-6 max-w-xl text-base leading-relaxed text-plum/75">
-            For more than 12 years, I&rsquo;ve helped businesses stay
-            visible, organized, and growing through websites, content, SEO,
-            systems, and digital operations.
-          </p>
-
-          <p className="mt-4 max-w-xl text-base leading-relaxed text-plum/75">
-            Haven Vertex was built to bring all of these services together
-            under one trusted partner.
+          <p className="mt-6 max-w-xl text-lg leading-relaxed text-plum/80">
+            I created Haven Vertex to help business owners stay visible,
+            organized, and focused on growth. By bringing websites, content,
+            systems, and digital support together in one place, I help
+            businesses spend less time managing the details and more time
+            moving forward.
           </p>
 
           <div className="mt-8 flex flex-wrap gap-3">
